@@ -86,7 +86,6 @@ const ChangePasswordController: React.FC = () => {
                 convertPasswordPolicies(response.data);
             });
             sessionService.loadCredentials().then(() => {
-
                 // Assuming we need to handle any post-credential loading logic here
                 // For now, we don't have any specific actions to take after loading credentials
                 // This can be expanded in the future if needed
@@ -96,53 +95,11 @@ const ChangePasswordController: React.FC = () => {
         });
     }, [authenticator, sessionService, userService]);
 
-            <h2>Change Password</h2>
-            <form onSubmit={(e) => { e.preventDefault(); changePassword(); }}>
-        
-                    <label>Old Password:</label>
-                    <input
-                        type="password"
-                        value={loginInfo.oldPassword}
-                        onChange={(e) => setLoginInfo({ ...loginInfo, oldPassword: e.target.value })}
-                        required
-                    />
-                </div>
-        
-                    <label>New Password:</label>
-                    <input
-                        type="password"
-                        value={loginInfo.newPassword}
-                        onChange={(e) => setLoginInfo({ ...loginInfo, newPassword: e.target.value })}
-                        required
-                    />
-                </div>
-        
-                    <label>Confirm New Password:</label>
-                    <input
-                        type="password"
-                        value={loginInfo.confirmPassword}
-                        onChange={(e) => setLoginInfo({ ...loginInfo, confirmPassword: e.target.value })}
-                        required
-                    />
-                </div>
-                {passwordDoesNotMatch && <p style={{ color: 'red' }}>Passwords do not match!</p>}
-                <button type="submit">Change Password</button>
-            </form>
-    
-                <h3>Password Policies</h3>
-                <ul>
-                    {passwordPolicies.map((policy, index) => (
-                        <li key={index}>{policy}</li>
-                    ))}
-                </ul>
-            </div>
-        </div>
     return (
         <div>
-
             <h2>Change Password</h2>
             <form onSubmit={(e) => { e.preventDefault(); changePassword(); }}>
-        
+                <div>
                     <label>Old Password:</label>
                     <input
                         type="password"
@@ -151,7 +108,7 @@ const ChangePasswordController: React.FC = () => {
                         required
                     />
                 </div>
-        
+                <div>
                     <label>New Password:</label>
                     <input
                         type="password"
@@ -160,7 +117,7 @@ const ChangePasswordController: React.FC = () => {
                         required
                     />
                 </div>
-        
+                <div>
                     <label>Confirm New Password:</label>
                     <input
                         type="password"
