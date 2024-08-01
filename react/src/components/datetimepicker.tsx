@@ -1,0 +1,102 @@
+﻿import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+
+interface DateTimePickerProps {
+    model: string;
+    observation: { disabled: boolean };
+    showTime: boolean;
+    illegalValue: boolean;
+    allowFutureDates: boolean;
+}
+
+const DateTimePicker: React.FC<DateTimePickerProps> = ({ model, observation, showTime, illegalValue, allowFutureDates }) => {
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+    const [maxDate, setMaxDate] = useState<string | undefined>(undefined);
+    const [internalModel, setInternalModel] = useState<string>(model);
+
+    useEffect(() => {
+        if (!allowFutureDates) {
+            setMaxDate(moment().format('YYYY-MM-DD'));
+        }
+    }, [allowFutureDates]);
+
+    useEffect(() => {
+        if (model) {
+            const date = moment(model).toDate();
+            setSelectedDate(date);
+            setSelectedTime(date);
+            updateModel(date, date);
+        }
+    }, [model]);
+
+    const getSelectedDateStr = (date: Date | null) => {
+        return date ? moment(date).format('YYYY-MM-DD') : '';
+    };
+
+    const getSelectedTimeStr = (time: Date | null) => {
+        return time ? moment(time).format('HH:mm') : '';
+    };
+
+    const valueNotFilled = () => {
+        return selectedDate == null && selectedTime == null;
+    };
+
+    const valueCompletelyFilled = () => {
+        return selectedDate != null && selectedTime != null;
+    };
+
+    const updateModel = (date: Date | null, time: Date | null) => {
+        if (valueCompletelyFilled()) {
+            setInternalModel(getSelectedDateStr(date) + ' ' + getSelectedTimeStr(time));
+        } else if (!isValid()) {
+            setInternalModel('Invalid Datetime');
+        } else {
+            setInternalModel('');
+        }
+    };
+
+    const isValid = () => {
+        return valueNotFilled() || valueCompletelyFilled();
+    };
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const date = event.target.value ? moment(event.target.value).toDate() : null;
+        setSelectedDate(date);
+        updateModel(date, selectedTime);
+    };
+
+    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const time = event.target.value ? moment(event.target.value, 'HH:mm').toDate() : null;
+        setSelectedTime(time);
+        updateModel(selectedDate, time);
+    };
+
+    return (
+        <div>
+            <div>
+                <input
+                    type="date"
+                    onChange={handleDateChange}
+                    className={illegalValue ? 'illegalValue' : ''}
+                    max={maxDate}
+                    value={selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : ''}
+                    disabled={observation.disabled}
+                />
+            </div>
+            {showTime && (
+                <div>
+                    <input
+                        type="time"
+                        onChange={handleTimeChange}
+                        className={!isValid() ? 'illegalValue' : ''}
+                        value={selectedTime ? moment(selectedTime).format('HH:mm') : ''}
+                        disabled={observation.disabled}
+                    />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default DateTimePicker;
