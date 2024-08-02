@@ -1,14 +1,14 @@
 ﻿import axios from 'axios';
-import { Bahmni } from '../utils/constants/bahmni';
+import { BahmniConstants } from '../utils/constants/BahmniConstants';
 
-export const stoppedOrderReasonConfig = async () => {
+export const stoppedOrderReasonConfig = async (): Promise<any[]> => {
     try {
-        const response = await axios.get(Bahmni.Common.Constants.conceptSearchByFullNameUrl, {
+        const response = await axios.get(BahmniConstants.globalPropertyUrl, {
             params: {
-                v: 'custom:(uuid,name,answers)',
-                name: Bahmni.Common.Constants.stoppedOrderReasonConceptName
+                property: 'bahmni.stoppedOrderReasonConfig'
             },
-            withCredentials: true
+            withCredentials: true,
+            transformResponse: [(data) => data]
         });
         return response.data;
     } catch (error) {
