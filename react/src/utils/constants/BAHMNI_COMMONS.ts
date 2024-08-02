@@ -1,0 +1,96 @@
+﻿const hostUrl = localStorage.getItem('host') ? `https://${localStorage.getItem('host')}` : "";
+const RESTWS_V1 = `${hostUrl}/openmrs/ws/rest/v1`;
+
+const BAHMNI_COMMONS = {
+    bahmniapiConceptUrl: `${RESTWS_V1}/bahmni/terminologies/concepts`,
+    bahmniCommonsSearchUrl: `${RESTWS_V1}/bahmni/search`,
+    bahmniConceptAnswerUrl: `${RESTWS_V1}/bahmniconceptanswer`,
+    bahmniDiagnosisUrl: `${RESTWS_V1}/bahmnicore/diagnosis/search`,
+    bahmniDeleteDiagnosisUrl: `${RESTWS_V1}/bahmnicore/diagnosis/delete`,
+    bahmniDispositionByPatientUrl: `${RESTWS_V1}/bahmnicore/disposition/patientWithLocale`,
+    bahmniDispositionByVisitUrl: `${RESTWS_V1}/bahmnicore/disposition/visitWithLocale`,
+    bahmniDrugOrderUrl: `${RESTWS_V1}/bahmnicore/drugOrders`,
+    bahmniEncounterUrl: `${RESTWS_V1}/bahmniencounter`,
+    bahmniFacilityLocationUrl: `${RESTWS_V1}/bahmnicore/facilityLocation`,
+    bahmniLabOrderResultsUrl: `${RESTWS_V1}/bahmnicore/labOrderResults`,
+    bahmniOrderUrl: `${RESTWS_V1}/bahmnicore/orders`,
+    bahmniSearchUrl: `${RESTWS_V1}/bahmnicore/search`,
+    bahmniVisitLocationUrl: `${RESTWS_V1}/bahmnicore/visitLocation`,
+    calculateDose: `${RESTWS_V1}/bahmnicore/calculateDose`,
+    conceptSearchByFullNameUrl: `${RESTWS_V1}/concept?s=byFullySpecifiedName`,
+    conceptUrl: `${RESTWS_V1}/concept`,
+    customUrl: `${hostUrl}/implementation_config/openmrs/apps/`,
+    dateFormat: "dd/mm/yyyy",
+    dateDisplayFormat: "DD-MMM-YYYY",
+    defaultEncounterType: `${RESTWS_V1}/bahmnicore/sql/globalproperty?property=bahmni.encounterType.default`,
+    diagnosisConceptSet: 'Diagnosis Concept Set',
+    diseaseTemplateUrl: `${RESTWS_V1}/bahmnicore/diseaseTemplates`,
+    drugOrderConfigurationUrl: `${RESTWS_V1}/bahmnicore/config/drugOrders`,
+    emrapiConceptUrl: `${hostUrl}/openmrs/ws/rest/emrapi/concept`,
+    emrapiDiagnosisLimit: 20,
+    emrapiDiagnosisUrl: `${hostUrl}/openmrs/ws/rest/emrapi/diagnosis`,
+    encounterConfigurationUrl: `${RESTWS_V1}/bahmnicore/config/bahmniencounter`,
+    encounterUrl: `${RESTWS_V1}/encounter`,
+    endVisitAndCreateEncounterUrl: `${RESTWS_V1}/bahmnicore/visit/endVisitAndCreateEncounter`,
+    endVisitUrl: `${RESTWS_V1}/bahmnicore/visit/endVisit`,
+    fhirExportPrivilege: "Export Patient Data",
+    fhirExportUrl: `${RESTWS_V1}/fhirexport`,
+    fhirMedicationsUrl: `${hostUrl}/openmrs/ws/fhir2/R4/Medication`,
+    fhirTasks: `${hostUrl}/openmrs/ws/fhir2/R4/Task`,
+    labResultUploadedFileNameUrl: "/uploaded_results/",
+    locationUrl: `${RESTWS_V1}/location`,
+    openmrsObsUrl: `${RESTWS_V1}/obs`,
+    openmrsObsRepresentation: "custom:(uuid,obsDatetime,value:(uuid,name:(uuid,name)))",
+    patientConfigurationUrl: `${RESTWS_V1}/bahmnicore/config/patient`,
+    patientImageUrlByPatientUuid: `${RESTWS_V1}/patientImage?patientUuid=`,
+    plainFhirExportPrivilege: "Export Non Anonymised Patient Data",
+    programUrl: `${RESTWS_V1}/program`,
+    programEnrollPatientUrl: `${RESTWS_V1}/bahmniprogramenrollment`,
+    programStateDeletionUrl: `${RESTWS_V1}/programenrollment`,
+    programAttributeTypes: `${RESTWS_V1}/programattributetype`,
+    relationshipTypesUrl: `${RESTWS_V1}/relationshiptype`,
+    personAttributeTypeUrl: `${RESTWS_V1}/personattributetype`,
+    visitSummaryUrl: `${RESTWS_V1}/bahmnicore/visit/summary`,
+    visitTypeUrl: `${RESTWS_V1}/visittype`,
+    visitUrl: `${RESTWS_V1}/visit`,
+    uuidRegex: "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+    serverErrorMessages: [
+        {
+            serverMessage: "Cannot have more than one active order for the same orderable and care setting at same time",
+            clientMessage: "One or more drugs you are trying to order are already active. Please change the start date of the conflicting drug or remove them from the new prescription."
+        },
+        {
+            serverMessage: "[Order.cannot.have.more.than.one]",
+            clientMessage: "One or more drugs you are trying to order are already active. Please change the start date of the conflicting drug or remove them from the new prescription."
+        }
+    ],
+    unAuthenticatedReferenceDataMap: {
+        "/openmrs/ws/rest/v1/location?tags=Login+Location&s=byTags&v=default": "LoginLocations",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=locale.allowed.list": "LocaleList"
+    },
+    authenticatedReferenceDataMap: {
+        "/openmrs/ws/rest/v1/idgen/identifiertype": "IdentifierTypes",
+        "/openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form": "AddressHierarchyLevels",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=mrs.genders": "Genders",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=bahmni.encountersession.duration": "encounterSessionDuration",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=bahmni.relationshipTypeMap": "RelationshipTypeMap",
+        "/openmrs/ws/rest/v1/bahmnicore/config/bahmniencounter?callerContext=REGISTRATION_CONCEPTS": "RegistrationConcepts",
+        "/openmrs/ws/rest/v1/relationshiptype?v=custom:(aIsToB,bIsToA,uuid)": "RelationshipType",
+        "/openmrs/ws/rest/v1/personattributetype?v=custom:(uuid,name,sortWeight,description,format,concept)": "PersonAttributeType",
+        "/openmrs/ws/rest/v1/entitymapping?mappingType=loginlocation_visittype&s=byEntityAndMappingType": "LoginLocationToVisitTypeMapping",
+        "/openmrs/ws/rest/v1/bahmnicore/config/patient": "PatientConfig",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Consultation+Note&v=custom:(uuid,name,answers)": "ConsultationNote",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Lab+Order+Notes&v=custom:(uuid,name)": "LabOrderNotes",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Impression&v=custom:(uuid,name)": "RadiologyImpressionConfig",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=All_Tests_and_Panels&v=custom:(uuid,name:(uuid,name),setMembers:(uuid,name:(uuid,name)))": "AllTestsAndPanelsConcept",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Dosage+Frequency&v=custom:(uuid,name,answers)": "DosageFrequencyConfig",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Dosage+Instructions&v=custom:(uuid,name,answers)": "DosageInstructionConfig",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=bahmni.encounterType.default": "DefaultEncounterType",
+        "/openmrs/ws/rest/v1/concept?s=byFullySpecifiedName&name=Stopped+Order+Reason&v=custom:(uuid,name,answers)": "StoppedOrderReasonConfig",
+        "/openmrs/ws/rest/v1/ordertype": "OrderType",
+        "/openmrs/ws/rest/v1/bahmnicore/config/drugOrders": "DrugOrderConfig",
+        "/openmrs/ws/rest/v1/bahmnicore/sql/globalproperty?property=drugOrder.drugOther": "NonCodedDrugConcept"
+    }
+};
+
+export default BAHMNI_COMMONS;
